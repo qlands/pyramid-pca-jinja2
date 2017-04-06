@@ -36,7 +36,7 @@ Then do:
 
     $ pserve ./development.init
 
-## Screen Shot
+## Screenshot
 
 ![Image](/screenshot.png?raw=true "Example home screen with and without plugin")
 
