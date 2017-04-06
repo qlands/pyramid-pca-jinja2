@@ -6,7 +6,7 @@
 
 CKAN however is developed using [Pylons](http://pylonsproject.org/about-pylons-framework.html) which is now superseded by Pyramid and coupled to its complexity makes it difficult to grasp how to apply such extensibility to Pyramid web applications.
 
-This example applies a modified version of CKAN extensible system to a simple Pyramid application that can be used as a starter to develop more complex extendable web applications. The example (pcaexample )is based on a “pyramid-cookiecutter-alchemy” Cookiecutter while the plugin is based on a “pyramid-cookiecutter-starter”. It uses Pyramid 1.8 with PyUtilib 5.4.1.
+This example applies a modified version of CKAN extensible system to a simple Pyramid application that can be used as a starter to develop more complex extendable web applications. The example (pcaexample) is based on a “pyramid-cookiecutter-alchemy” [Cookiecutter](https://github.com/audreyr/cookiecutter) while the plugin is based on a “pyramid-cookiecutter-starter”. It uses Pyramid 1.8.3 with PyUtilib 5.4.1.
 
 ## Installation and testing
 To build and run the example host application (pcaexample) on Linux do:

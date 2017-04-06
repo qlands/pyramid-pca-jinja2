@@ -26,8 +26,8 @@
         <entry file="file://$PROJECT_DIR$/../README.md">
           <provider selected="true" editor-type-id="split-provider[text-editor;MarkdownPreviewEditor]">
             <state split_layout="SPLIT">
-              <first_editor relative-caret-position="663">
-                <caret line="39" column="0" lean-forward="true" selection-start-line="39" selection-start-column="0" selection-end-line="39" selection-end-column="0" />
+              <first_editor relative-caret-position="136">
+                <caret line="8" column="391" lean-forward="false" selection-start-line="8" selection-start-column="391" selection-end-line="8" selection-end-column="391" />
                 <folding />
               </first_editor>
               <second_editor>
@@ -593,7 +593,7 @@
     <servers />
   </component>
   <component name="ToolWindowManager">
-    <frame x="112" y="0" width="1776" height="1033" extended-state="5" />
+    <frame x="112" y="0" width="1776" height="1033" extended-state="4" />
     <editor active="true" />
     <layout>
       <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.18002257" sideWeight="0.5" order="0" side_tool="false" content_ui="combo" />
@@ -1022,8 +1022,8 @@
     <entry file="file://$PROJECT_DIR$/../README.md">
       <provider selected="true" editor-type-id="split-provider[text-editor;MarkdownPreviewEditor]">
         <state split_layout="SPLIT">
-          <first_editor relative-caret-position="663">
-            <caret line="39" column="0" lean-forward="true" selection-start-line="39" selection-start-column="0" selection-end-line="39" selection-end-column="0" />
+          <first_editor relative-caret-position="136">
+            <caret line="8" column="391" lean-forward="false" selection-start-line="8" selection-start-column="391" selection-end-line="8" selection-end-column="391" />
             <folding />
           </first_editor>
           <second_editor>
