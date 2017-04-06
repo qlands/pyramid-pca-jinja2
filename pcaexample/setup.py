@@ -9,7 +9,7 @@ with open(os.path.join(here, 'CHANGES.txt')) as f:
     CHANGES = f.read()
 
 requires = [
-    'pyramid',
+    'pyramid == 1.8.3',
     'pyramid_jinja2',
     'pyramid_debugtoolbar',
     'pyramid_tm',
@@ -17,7 +17,8 @@ requires = [
     'transaction',
     'zope.sqlalchemy',
     'waitress',
-    'webhelpers'
+    'webhelpers',
+    'pyutilib == 5.4.1'
 ]
 
 tests_require = [

@@ -1,6 +1,6 @@
 # An extendable Pyramid application using PCA and Jinja2 plugins
 
-[Pyramid]( https://trypyramid.com/) is a great framework for developing web applications that also support the development of ["Extensible" and "Pluggable"]( http://docs.pylonsproject.org/projects/pyramid/en/latest/narr/extending.html) software based on certain rules. However, there is no much documentation on how to create such type of applications.
+[Pyramid]( https://trypyramid.com/) is a great framework for developing web applications that also supports the development of ["Extensible" and "Pluggable"]( http://docs.pylonsproject.org/projects/pyramid/en/latest/narr/extending.html) software based on certain rules. However, there is no much documentation on how to create such type of applications.
 
 [CKAN]( https://ckan.org/) is an excellent example of a Web application that can be extended or customized using plugins. It relies on [PyUtilib Component Architecture]( https://pypi.python.org/pypi/PyUtilib) to declare a series of interfaces and extension points that then are used by plugins to hook in. It also implements a series of [Jinja2]( http://jinja.pocoo.org/) extension (notably CKAN_EXTENDS) that allows easily template inheritance between CKAN and connected plugins.
 
@@ -11,13 +11,14 @@ This example applies a modified version of CKAN extensible system to a simple Py
 ## Installation and testing
 To build and run the example host application (pcaexample) on Linux do:
 
-    $ git git@github.com:qlands/pyramid-pca-jinja2.git
+    $ git clone https://github.com/qlands/pyramid-pca-jinja2.git
     $ virtualenv pcaexample_env
     $ . ./pcaexample_env/bin/activate
     $ cd pyramid-pca-jinja2
     $ cd pcaexample
     $ python setup.py install
-    $ pserve ./development.init
+    $ initialize_pcaexample_db ./development.ini
+    $ pserve ./development.ini
 
 To build the a example of the plugin (pcaplugin) on Linux do:
 
@@ -29,11 +30,16 @@ To build the a example of the plugin (pcaplugin) on Linux do:
 
 
 Edit the configuration of the host application (development.ini) to load the plugin by **uncommenting line 20**.
-> #pcaexample.plugins = examplePlugin -> pcaexample.plugins = examplePlugin
+> #pcaexample.plugins = examplePlugin [**change to**]  pcaexample.plugins = examplePlugin
 
 Then do:
 
     $ pserve ./development.init
+
+## Screen Shot
+
+![Image](/screenshot.png?raw=true "Example home screen with and without plugin")
+
 
 ## Author
 Carlos Quiros (cquiros_at_qlands.com / c.f.quiros_at_cgiar.org)
