@@ -1,0 +1,3 @@
+[run]
+source = pcaexample
+omit = pcaexample/test*

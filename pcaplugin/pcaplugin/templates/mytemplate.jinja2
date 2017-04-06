@@ -1,0 +1,9 @@
+{% extend_this %}
+
+{% block logo %}
+    <img class="logo img-responsive" src="{{request.url_for_static('pstatic/ppyramid.png') }}" alt="pyramid web framework">
+{% endblock logo %}
+
+{% block title %}
+  <p class="lead">Welcome to <span class="font-normal">{{ project }}</span>, a&nbsp;Pyramid application that has been extended using PCA plugins.</p>
+{% endblock title %}
