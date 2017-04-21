@@ -6,6 +6,7 @@ from webhelpers.html import literal
 from jinja2 import FileSystemLoader
 import re
 import os
+import pcaexample.resources as r
 
 jinjaEnv = Environment()
 log = logging.getLogger(__name__)
@@ -38,7 +39,7 @@ class extendThis(ext.Extension):
     
     '''
 
-    tags = set(['extend_this'])
+    tags = ['extend_this']
 
     def __init__(self, environment):
         ext.Extension.__init__(self, environment)
@@ -128,8 +129,41 @@ class BaseExtension(ext.Extension):
 
         return nodes.Output([make_call_node()]).set_lineno(tag.lineno)
 
+class ResourceExtension(BaseExtension):
+    ''' 
+    
+    This allows the inclusion of resources from templates
+    Useful in combination with tag {% extend_this %}
+    to include plugin resources in extended templates 
+
+    {% resource '<resourceID>' %}
+
+    This code is based on CKAN 
+    :Copyright (C) 2007 Open Knowledge Foundation
+    :license: AGPL V3, see LICENSE for more details.
+    
+    '''
+
+    tags = ['resource']
+
+    @classmethod
+    def _call(cls, args, kwargs):
+        assert len(args) == 2
+        assert len(kwargs) == 0
+        if args[0] == "JS":
+            resource = r.getJSResource(args[1])
+            resource.need()
+        if args[0] == "CSS":
+            resource = r.getCSSResource(args[1])
+            resource.need()
+        return ''
+
+
 class SnippetExtension(BaseExtension):
-    ''' Custom snippet tag
+    ''' 
+    
+    This tags inject small portions of reusable code i.e. snippets
+    into a jinja2 template
 
     {% snippet <template_name> [, <keyword>=<value>].. %}
 
@@ -140,7 +174,7 @@ class SnippetExtension(BaseExtension):
 
     '''
 
-    tags = set(['snippet'])
+    tags = ['snippet']
 
     @classmethod
     def _call(cls, args, kwargs):

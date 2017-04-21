@@ -1,9 +1,23 @@
 {% extend_this %}
 
 {% block logo %}
+    {# Overwrite the logo section #}
     <img class="logo img-responsive" src="{{request.url_for_static('pstatic/ppyramid.png') }}" alt="pyramid web framework">
 {% endblock logo %}
 
 {% block title %}
-  <p class="lead">Welcome to <span class="font-normal">{{ project }}</span>, a&nbsp;Pyramid application that has been extended using PCA plugins.</p>
+    {# Overwrite the title section #}
+    <p class="lead">Welcome to <span class="font-normal">{{ project }}</span>, a&nbsp;Pyramid application that has been extended using PCA plugins.</p>
 {% endblock title %}
+
+{% block extra %}
+    {#
+     We call super() first so the snippet of the parent is included
+     then we require the CSS of leaflet and then the JS of mymap.
+     We add a new div so the map is shown
+    #}
+    {{ super() }}
+    {% resource 'CSS','leaflet' %}
+    {% resource 'JS','mymap' %}
+    <div id="mapid" style="height: 600px; width: 600px"></div>
+{% endblock extra %}

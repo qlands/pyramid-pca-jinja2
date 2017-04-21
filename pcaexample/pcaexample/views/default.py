@@ -1,7 +1,9 @@
 from pyramid.response import Response
 from sqlalchemy.exc import DBAPIError
 
+import pcaexample.resources as r
 from ..models import MyModel
+
 
 def my_view(request):
     try:
@@ -9,6 +11,11 @@ def my_view(request):
         one = query.filter(MyModel.name == 'one').first()
     except DBAPIError:
         return Response(db_err_msg, content_type='text/plain', status=500)
+
+    CSSToInject = r.getCSSResource('theme')
+    CSSToInject.need()
+    JSToInject = r.getJSResource('bootstrap')
+    JSToInject.need()
     return {'one': one, 'project': 'PCA Example'}
 
 

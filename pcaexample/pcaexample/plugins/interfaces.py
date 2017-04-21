@@ -13,6 +13,7 @@ __all__ = [
     'Interface',
     'IRoutes',
     'IConfig',
+    'IResource',
     'IPluginObserver'
 ]
 
@@ -69,6 +70,39 @@ class IConfig(Interface):
 
         :param config: ``pyramid.config`` object
         """
+
+class IResource(Interface):
+    """
+        Allows to hook into the creation of FanStatic libraries and resources         
+    """
+
+    def add_libraries(self,config):
+        """
+        Called by the host application so plugins can add new FanStatic libraries AFTER the host
+
+        :param config: ``pyramid.config`` object
+        :return Returns a dict array [{'name':'mylibrary','path':'/path/to/my/resources'}]
+        """
+        return []
+
+    def add_JSResources(self,config,loadedJSResources):
+        """
+        Called by the host application so plugins can add new FanStatic JS Resources AFTER the host
+        
+        :param config: ``pyramid.config`` object        
+        :return Returns a dict array [{'libraryname':'mylibrary','id':'myResourceID','file':'/relative/path/to/jsFile','depends':'resourceID'}]
+        """
+        return []
+
+    def add_CSSResources(self, config,loadedCSSResources):
+        """
+        Called by the host application so plugins can add new FanStatic JS Resources AFTER the host
+
+        :param config: ``pyramid.config`` object        
+        :return Returns a dict array [{'libraryname':'mylibrary','id':'myResourceID','file':'/relative/path/to/jsFile','depends':'resourceID'}]
+        """
+        return []
+
 
 class IPluginObserver(Interface):
     """
