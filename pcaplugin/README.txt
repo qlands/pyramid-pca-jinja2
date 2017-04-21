@@ -1,29 +1,9 @@
 PCA Plugin example
 ===============================
 
-Getting Started
----------------
+This is an example of a plugin that extends the HOST application
 
-- Change directory into your newly created project.
+To build the plugin do:
+$ python setup.py develop
 
-    cd pcaplugin
-
-- Create a Python virtual environment.
-
-    python3 -m venv env
-
-- Upgrade packaging tools.
-
-    env/bin/pip install --upgrade pip setuptools
-
-- Install the project in editable mode with its testing requirements.
-
-    env/bin/pip install -e ".[testing]"
-
-- Run your project's tests.
-
-    env/bin/pytest
-
-- Run your project.
-
-    env/bin/pserve development.ini
+Building the plugin does not make the HOST application to run it. You need to modify the HOST development.ini file and uncomment line 20 for the plugin to be loaded
