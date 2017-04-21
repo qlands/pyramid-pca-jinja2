@@ -26,8 +26,8 @@
         <entry file="file://$PROJECT_DIR$/../README.md">
           <provider selected="true" editor-type-id="split-provider[text-editor;MarkdownPreviewEditor]">
             <state split_layout="SPLIT">
-              <first_editor relative-caret-position="612">
-                <caret line="36" column="21" lean-forward="false" selection-start-line="36" selection-start-column="6" selection-end-line="36" selection-end-column="29" />
+              <first_editor relative-caret-position="306">
+                <caret line="18" column="167" lean-forward="false" selection-start-line="18" selection-start-column="167" selection-end-line="18" selection-end-column="167" />
                 <folding />
               </first_editor>
               <second_editor>
@@ -162,8 +162,8 @@
         <option value="$PROJECT_DIR$/pcaexample/config/jinja_extensions.py" />
         <option value="$PROJECT_DIR$/pcaexample/plugins/utilities.py" />
         <option value="$PROJECT_DIR$/development.ini" />
-        <option value="$PROJECT_DIR$/../README.md" />
         <option value="$PROJECT_DIR$/README.txt" />
+        <option value="$PROJECT_DIR$/../README.md" />
       </list>
     </option>
   </component>
@@ -992,8 +992,8 @@
     <entry file="file://$PROJECT_DIR$/../README.md">
       <provider selected="true" editor-type-id="split-provider[text-editor;MarkdownPreviewEditor]">
         <state split_layout="SPLIT">
-          <first_editor relative-caret-position="612">
-            <caret line="36" column="21" lean-forward="false" selection-start-line="36" selection-start-column="6" selection-end-line="36" selection-end-column="29" />
+          <first_editor relative-caret-position="306">
+            <caret line="18" column="167" lean-forward="false" selection-start-line="18" selection-start-column="167" selection-end-line="18" selection-end-column="167" />
             <folding />
           </first_editor>
           <second_editor>

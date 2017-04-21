@@ -16,7 +16,7 @@ This example applies a modified version of CKAN extensible system to a simple Py
 
 The example (pcaexample) is based on a “pyramid-cookiecutter-alchemy” [Cookiecutter](https://github.com/audreyr/cookiecutter) while the plugin is based on a “pyramid-cookiecutter-starter”. It uses Pyramid 1.8.3 with PyUtilib 5.4.1.
 
-Please note that the example implements Pyramid "Extensible" and "Pluggable" capabilities in a way that I feel it would satisfy most needs but it might not be the best or the most logical way of doing it. **Comments and suggestions are welcomed.**
+Please note that the example implements Pyramid "Extensible" and "Pluggable" capabilities in a way that I feel it would satisfy most needs. I don't claim is the best nor the most logical way of doing it. **Comments and suggestions are welcomed.**
 
 ## Installation and testing
 To build and run the example host application (pcaexample) on Linux do:
