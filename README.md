@@ -39,8 +39,8 @@ To build the a example of the plugin (pcaplugin) on Linux do:
     $ cd pcaexample
 
 
-Edit the configuration of the host application (development.ini) to load the plugin by **uncommenting line 20**.
-> #pcaexample.plugins = examplePlugin [**change to**]  pcaexample.plugins = examplePlugin
+Edit the configuration of the host application (development.ini) to load the plugin by **uncommenting line 26** to read:
+> pcaexample.plugins = examplePlugin
 
 Then do:
 
