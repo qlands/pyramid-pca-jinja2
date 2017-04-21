@@ -44,7 +44,7 @@ Edit the configuration of the host application (development.ini) to load the plu
 
 Then do:
 
-    $ pserve ./development.init
+    $ pserve ./development.ini
 
 ## Screenshot
 
