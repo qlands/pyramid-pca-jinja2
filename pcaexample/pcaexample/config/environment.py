@@ -22,6 +22,21 @@ from pcaexample.routes import loadRoutes
 def __url_for_static(request,static_file):
     return request.host_url + '/' + static_file
 
+class requestResources(object):
+
+    def __init__(self, request):
+        self.request = request
+        self.curretResources = []
+
+    def addResource(self, libraryName, resourceID, resourceType):
+        self.curretResources.append({'libraryName':libraryName,'resourceID':resourceID,'resourceType':resourceType})
+
+    def resourceInRequest(self, libraryName, resourceID, resourceType):
+        for resource in self.curretResources:
+            if resource["libraryName"] == libraryName and resource["resourceID"] == resourceID and resource["resourceType"] == resourceType:
+                return True
+        return False
+
 def load_environment(settings,config,apppath):
 
     class resourceFoundException(Exception):
@@ -31,11 +46,11 @@ def load_environment(settings,config,apppath):
     config.registry.settings['jinja2.extensions'] = [SnippetExtension,extendThis,ResourceExtension]
 
     config.include('pyramid_jinja2')
-    config.include('pyramid_fanstatic')
     config.add_request_method(__url_for_static, 'url_for_static')
+    config.add_request_method(requestResources, 'activeResources', reify=True)
 
     # Add core fanstatic library
-    r.addLibrary('coreresources',os.path.join(apppath, 'fanstatic'))
+    r.addLibrary('coreresources',os.path.join(apppath, 'fanstatic'),config)
 
     # Add core CSS and JS
     r.addCSSResource('coreresources','bootstrapcss','bootstrap.min.css')
@@ -43,6 +58,9 @@ def load_environment(settings,config,apppath):
     r.addJSResource('coreresources','jquery','jquery.min.js')
     r.addJSResource('coreresources', 'bootstrap', 'bootstrap.min.js')
 
+    r.printLibraryTree('coreresources')
+
+    r.printNeedCSS("coreresources","theme4")
 
     templatesPathArray =[]
     templatesPath = os.path.join(apppath, 'templates')
@@ -59,36 +77,30 @@ def load_environment(settings,config,apppath):
     for plugin in p.PluginImplementations(p.IConfig):
         plugin.update_config(config)
 
-    # Call any connected plugins to add their libraries
+    #Call any connected plugins to add their libraries
     for plugin in p.PluginImplementations(p.IResource):
         pluginLibraries = plugin.add_libraries(config)
         for library in pluginLibraries:
-            r.addLibrary(library["name"], library["path"])
+            r.addLibrary(library["name"], library["path"],config)
 
     # Call any connected plugins to add their CSS Resources
     for plugin in p.PluginImplementations(p.IResource):
-        cssResources = plugin.add_CSSResources(config, r.getCSSResourceList())
+        cssResources = plugin.add_CSSResources(config)
+        print "*************************100"
+        print cssResources
+        print "*************************100"
         for resource in cssResources:
-            if resource["depends"] != "CHAIN" and resource["id"] != "CHAIN":
-                r.addCSSResource(resource["libraryname"], resource["id"], resource["file"], resource["depends"])
-            else:
-                if resource["depends"] != "CHAIN":
-                    raise resourceFoundException("Plugin resources cannot be chained")
-                else:
-                    raise resourceFoundException("Plugin resources cannot have CHAIN as ID")
+            r.addCSSResource(resource["libraryname"], resource["id"], resource["file"], resource["depends"])
+
 
     # Call any connected plugins to add their JS Resources
     for plugin in p.PluginImplementations(p.IResource):
-        jsResources = plugin.add_JSResources(config, r.getJSResourceList())
+        jsResources = plugin.add_JSResources(config)
+        print "*************************101"
+        print jsResources
+        print "*************************101"
         for resource in jsResources:
-            if resource["depends"] != "CHAIN":
-                r.addJSResource(resource["libraryname"], resource["id"], resource["file"], resource["depends"])
-            else:
-                if resource["depends"] != "CHAIN":
-                    raise resourceFoundException("Plugin resources cannot be chained")
-                else:
-                    raise resourceFoundException('Plugin resources cannot have "CHAIN" as ID')
-
+            r.addJSResource(resource["libraryname"], resource["id"], resource["file"], resource["depends"])
 
     # jinjaEnv is used by the jinja2 extensions so we get it from the config
     jinjaEnv = config.get_jinja2_environment()

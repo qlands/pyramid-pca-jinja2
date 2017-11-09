@@ -1,5 +1,13 @@
 {% extend_this %}
 
+{% block links %}
+    {# Overwrite the links section #}
+    {# Firt call the links of the parent #}
+    {{ super() }}
+    {# Add the required CSS for this page #}
+    {% resource request,'plibrary','CSS','leaflet' %}
+{% endblock links %}
+
 {% block logo %}
     {# Overwrite the logo section #}
     <img class="logo img-responsive" src="{{request.url_for_static('pstatic/ppyramid.png') }}" alt="pyramid web framework">
@@ -17,7 +25,15 @@
      We add a new div so the map is shown
     #}
     {{ super() }}
-    {% resource 'CSS','leaflet' %}
-    {% resource 'JS','mymap' %}
     <div id="mapid" style="height: 600px; width: 600px"></div>
 {% endblock extra %}
+
+{% block scripts %}
+    {# Overwrite the scripts section #}
+    {# Firt call the scripts of the parent #}
+    {{ super() }}
+    {# Add the required JS for this page #}
+    {% resource request,'plibrary','JS','mymap' %}
+{% endblock scripts %}
+
+

@@ -4,7 +4,6 @@ import logging
 from jinja2 import Environment
 from webhelpers.html import literal
 from jinja2 import FileSystemLoader
-import re
 import os
 import pcaexample.resources as r
 
@@ -29,16 +28,23 @@ def render_snippet(template_name, **kw):
     return literal(output)
 
 
-class extendThis(ext.Extension):
-    ''' Custom {% extend_this %} tag that allows templates
-    to inherit from the host template futher down the template search path.
-    
-    This code is based on CKAN 
-    :Copyright (C) 2007 Open Knowledge Foundation
-    :license: AGPL V3, see LICENSE for more details.
-    
-    '''
+def renderResource(request,libraryName,resourceType,resourceID):
+    if resourceType == "JS" or resourceType == "CSS":
+        if resourceType == "CSS":
+            html = '<link href="{{ file }}" rel="stylesheet">'
+        else:
+            html = '<script src="{{ file }}"></script>'
+        resources = r.need(libraryName,resourceID,resourceType)
+        resourcesToInclude = []
+        for resource in resources:
+            if not request.activeResources.resourceInRequest(libraryName,resource["resourceID"],resourceType):
+                request.activeResources.addResource(libraryName,resource["resourceID"],resourceType)
+                resourcesToInclude.append(jinjaEnv.from_string(html).render(file=request.host_url + '/' + resource["filePath"]))
+        return literal("\n".join(resourcesToInclude))
+    else:
+        return ""
 
+class extendThis(ext.Extension):
     tags = ['extend_this']
 
     def __init__(self, environment):
@@ -130,33 +136,14 @@ class BaseExtension(ext.Extension):
         return nodes.Output([make_call_node()]).set_lineno(tag.lineno)
 
 class ResourceExtension(BaseExtension):
-    ''' 
-    
-    This allows the inclusion of resources from templates
-    Useful in combination with tag {% extend_this %}
-    to include plugin resources in extended templates 
-
-    {% resource '<resourceID>' %}
-
-    This code is based on CKAN 
-    :Copyright (C) 2007 Open Knowledge Foundation
-    :license: AGPL V3, see LICENSE for more details.
-    
-    '''
-
     tags = ['resource']
 
     @classmethod
     def _call(cls, args, kwargs):
-        assert len(args) == 2
+        assert len(args) == 4
         assert len(kwargs) == 0
-        if args[0] == "JS":
-            resource = r.getJSResource(args[1])
-            resource.need()
-        if args[0] == "CSS":
-            resource = r.getCSSResource(args[1])
-            resource.need()
-        return ''
+        assert args[2] == "JS" or args[2] == "CSS"
+        return renderResource(args[0],args[1],args[2],args[3])
 
 
 class SnippetExtension(BaseExtension):
@@ -181,25 +168,3 @@ class SnippetExtension(BaseExtension):
         assert len(args) == 1
         return render_snippet(args[0], **kwargs)
 
-def regularise_html(html):
-    ''' Take badly formatted html with strings 
-    
-    
-    This code is based on CKAN 
-    :Copyright (C) 2007 Open Knowledge Foundation
-    :license: AGPL V3, see LICENSE for more details.
-    
-    
-    '''
-
-    if html is None:
-        return
-    html = re.sub('\n', ' ', html)
-    matches = re.findall('(<[^>]*>|%[^%]\([^)]*\)\w|[^<%]+|%)', html)
-    for i in xrange(len(matches)):
-        match = matches[i]
-        if match.startswith('<') or match.startswith('%'):
-            continue
-        matches[i] = re.sub('\s{2,}', ' ', match)
-    html = ''.join(matches)
-    return html

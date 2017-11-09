@@ -85,7 +85,7 @@ class IResource(Interface):
         """
         return []
 
-    def add_JSResources(self,config,loadedJSResources):
+    def add_JSResources(self,config):
         """
         Called by the host application so plugins can add new FanStatic JS Resources AFTER the host
         
@@ -94,7 +94,7 @@ class IResource(Interface):
         """
         return []
 
-    def add_CSSResources(self, config,loadedCSSResources):
+    def add_CSSResources(self, config):
         """
         Called by the host application so plugins can add new FanStatic JS Resources AFTER the host
 

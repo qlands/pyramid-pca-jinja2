@@ -28,19 +28,19 @@ class PCAExamplePlugin(plugins.SingletonPlugin):
         libraries.append(u.addLibrary('plibrary','fanstatic'))
         return libraries
 
-    def add_JSResources(self, config, loadedJSResources):
+    def add_JSResources(self, config):
         # We add here two new JavaScripts: leaflet and mymap.js so we can required then later on in mytemplate.jinja2
         # The JS of leaflet required bootstrap so it will be included after the JS of bootstrap
         # My map requires leaflet so if we need mymap it will include the JS of leaflet
         myJS = []
-        myJS.append(u.addJSResource('plibrary','leaflet','leaflet/leaflet.js','bootstrap'))
-        myJS.append(u.addJSResource('plibrary', 'mymap', 'mymap.js', 'leaflet'))
+        myJS.append(u.addJSResource('plibrary','leaflet','leaflet/leaflet.js'))
+        myJS.append(u.addJSResource('plibrary', 'mymap', 'mymap.js'))
         return myJS
 
-    def add_CSSResources(self, config, loadedCSSResources):
+    def add_CSSResources(self, config):
         # We add here the new css for leaflet we can required it later on in mytemplate.jinja2
         myCSS = []
-        myCSS.append(u.addCSSResource('plibrary', 'leaflet', 'leaflet/leaflet.css', 'bootstrapcss'))
+        myCSS.append(u.addCSSResource('plibrary', 'leaflet', 'leaflet/leaflet.css'))
         return myCSS
 
 

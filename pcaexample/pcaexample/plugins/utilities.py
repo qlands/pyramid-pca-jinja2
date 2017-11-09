@@ -48,10 +48,10 @@ def addStaticView(config,viewName,relative_path,cache_max_age=3600):
     else:
         raise invalidPathException("Static path %s does not exists" % relative_path)
 
-def addJSResource(libraryName,resourceID,resourceFile,depends):
+def addJSResource(libraryName,resourceID,resourceFile,depends='CHAIN'):
     return {'libraryname':libraryName,'id':resourceID,'file':resourceFile,'depends':depends}
 
-def addCSSResource(libraryName,resourceID,resourceFile,depends):
+def addCSSResource(libraryName,resourceID,resourceFile,depends='CHAIN'):
     return {'libraryname': libraryName, 'id': resourceID, 'file': resourceFile, 'depends': depends}
 
 def addLibrary(name,path):
@@ -65,8 +65,3 @@ def addLibrary(name,path):
 def addRoute(name,path,view,renderer):
     return {'name': name, 'path': path, 'view': view, 'renderer': renderer}
 
-def getJSResource(resourceID):
-    return r.getJSResource(resourceID)
-
-def getCSSResource(resourceID):
-    return r.getCSSResource(resourceID)

@@ -19,7 +19,7 @@ requires = [
     'waitress',
     'webhelpers',
     'pyutilib == 5.4.1',
-    'pyramid_fanstatic'
+    'lxml',
 ]
 
 tests_require = [
