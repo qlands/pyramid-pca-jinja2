@@ -1,12 +1,3 @@
-'''
-This files configure host application
-
-This code is based on CKAN 
-:Copyright (C) 2007 Open Knowledge Foundation
-:license: AGPL V3, see LICENSE for more details.
-
-'''
-
 import os
 
 import pcaexample.plugins as p
@@ -58,10 +49,6 @@ def load_environment(settings,config,apppath):
     r.addJSResource('coreresources','jquery','jquery.min.js')
     r.addJSResource('coreresources', 'bootstrap', 'bootstrap.min.js')
 
-    r.printLibraryTree('coreresources')
-
-    r.printNeedCSS("coreresources","theme4")
-
     templatesPathArray =[]
     templatesPath = os.path.join(apppath, 'templates')
     templatesPathArray.append(templatesPath)
@@ -86,9 +73,6 @@ def load_environment(settings,config,apppath):
     # Call any connected plugins to add their CSS Resources
     for plugin in p.PluginImplementations(p.IResource):
         cssResources = plugin.add_CSSResources(config)
-        print "*************************100"
-        print cssResources
-        print "*************************100"
         for resource in cssResources:
             r.addCSSResource(resource["libraryname"], resource["id"], resource["file"], resource["depends"])
 
@@ -96,9 +80,6 @@ def load_environment(settings,config,apppath):
     # Call any connected plugins to add their JS Resources
     for plugin in p.PluginImplementations(p.IResource):
         jsResources = plugin.add_JSResources(config)
-        print "*************************101"
-        print jsResources
-        print "*************************101"
         for resource in jsResources:
             r.addJSResource(resource["libraryname"], resource["id"], resource["file"], resource["depends"])
 

@@ -10,7 +10,6 @@ This code is based on CKAN
 
 import inspect
 import os
-import pcaexample.resources as r
 from exceptions import Exception
 
 class resourceFoundException(Exception):

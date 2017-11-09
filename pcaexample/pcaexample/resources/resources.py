@@ -4,8 +4,7 @@ from lxml import etree
 
 __all__ = [
     'addLibrary', 'addJSResource',
-    'addCSSResource','need','printLibraryTree',
-    'printNeedCSS'
+    'addCSSResource','need'
 ]
 
 _LIBRARIES = []
@@ -31,25 +30,7 @@ def library_path_found(path):
             return True
     return False
 
-def printLibraryTree(libraryName):
-    index = library_index(libraryName)
-    if index >= 0:
-        print "************************77"
-        print etree.tostring(_LIBRARIES[index]["library"], pretty_print=True)
-        print "************************77"
 
-def printNeedCSS(libraryName,resourceID):
-    index = library_index(libraryName)
-    if index >= 0:
-        resource = _LIBRARIES[index]["library"].findall(".//CSS[@resourceID='" + resourceID + "']")
-        if resource:
-            print "************************88"
-            ancestors = []
-            for ancestor in resource[0].iterancestors():
-                if ancestor.tag != "root":
-                    ancestors.insert(0,ancestor.get("resourceID"))
-            print ancestors
-            print "************************88"
 
 class libraryFoundException(Exception):
     def __init__(self, msg):
@@ -114,7 +95,6 @@ def addResourceToLibrary(libraryIndex,resourceType,resourceID,resourceFile,depen
             resource.set("resourceFile", resourceFile)
             toResource[0].append(resource)
         else:
-            print depends + "-!!!!!"
             raise resourceFoundException("Dependency resource %s does not exists" % depends)
     if resourceType == "JS":
         _LIBRARIES[libraryIndex]["JSResources"].append({'libraryIndex':libraryIndex,'resourceID':resourceID})
