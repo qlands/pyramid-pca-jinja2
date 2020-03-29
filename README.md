@@ -14,7 +14,7 @@ This example applies a modified version of CKAN extensible system to a simple Py
  - Easy Jinja2 template inheritance and resource injection
 
 
-The example (pcaexample) is based on a “pyramid-cookiecutter-alchemy” [Cookiecutter](https://github.com/audreyr/cookiecutter) while the plug-in is based on a “pyramid-cookiecutter-starter”. 
+The example (pcaexample) is based on a “pyramid-cookiecutter-alchemy” [Cookiecutter](https://github.com/audreyr/cookiecutter) while the plug-in is based on a “pyramid-cookiecutter-starter”.  Both use Python 3.
 
 Please note that this example implements Pyramid "Extensible" and "Pluggable" capabilities in a way that I feel it would satisfy most needs. I don't claim is the best nor the most logical way of doing it.  See [FormShare](https://github.com/qlands/FormShare) for a real example of this approach.
 
@@ -23,30 +23,36 @@ Please note that this example implements Pyramid "Extensible" and "Pluggable" ca
 ## Installation and testing
 To build and run the example host application (pcaexample) on Linux do:
 
-    $ git clone https://github.com/qlands/pyramid-pca-jinja2.git
-    $ virtualenv pcaexample_env
-    $ . ./pcaexample_env/bin/activate
-    $ cd pyramid-pca-jinja2
-    $ cd pcaexample
-    $ python setup.py install
-    $ initialize_pcaexample_db ./development.ini
-    $ pserve ./development.ini
+```shell
+git clone https://github.com/qlands/pyramid-pca-jinja2.git
+python3 -m venv pcaexample_env
+source ./pcaexample_env/bin/activate
+cd pyramid-pca-jinja2
+cd pcaexample
+python setup.py install
+initialize_pcaexample_db ./development.ini
+pserve ./development.ini
+```
 
 To build the a example of the plugin (pcaplugin) on Linux do:
 
-    $ cd pyramid-pca-jinja2
-    $ cd pcaplugin
-    $ python setup.py develop
-    $ cd ..
-    $ cd pcaexample
+```shell
+cd pyramid-pca-jinja2
+cd pcaplugin
+python setup.py develop
+cd ..
+cd pcaexample
+```
 
 
-Edit the configuration of the host application (development.ini) to load the plugin by **uncommenting line 26** to read:
+Edit the configuration of the host application (development.ini) to load the plug-in by **uncommenting line 26** to read:
 > pcaexample.plugins = examplePlugin
 
 Then do:
 
-    $ pserve ./development.ini
+```shell
+pserve ./development.ini
+```
 
 ## Screenshot
 
