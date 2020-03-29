@@ -1,4 +1,4 @@
-'''
+"""
 
 This file declares the PCA interfaces and their methods:
 
@@ -6,23 +6,24 @@ This code is based on CKAN
 :Copyright (C) 2007 Open Knowledge Foundation
 :license: AGPL V3, see LICENSE for more details.
 
-'''
+"""
 
 
 __all__ = [
-    'Interface',
-    'IRoutes',
-    'IConfig',
-    'IResource',
-    'IPluginObserver'
+    "Interface",
+    "IRoutes",
+    "IConfig",
+    "IResource",
+    "IPluginObserver",
+    "ITemplateHelpers",
 ]
 
 
 from inspect import isclass
 from pyutilib.component.core import Interface as _pca_Interface
 
-class Interface(_pca_Interface):
 
+class Interface(_pca_Interface):
     @classmethod
     def provided_by(cls, instance):
         return cls.implemented_by(instance.__class__)
@@ -36,77 +37,115 @@ class Interface(_pca_Interface):
         except AttributeError:
             return False
 
+
 class IRoutes(Interface):
     """
-    Plugin into the creation of routes of the host program.
+    Plugin into the creation of routes.
 
     """
-    def before_mapping(self,config):
-        """
-        Called before the mapping of router of the host app.
 
-        :param config: ``pyramid.config`` object that can be used to call add_view
-        :return Returns a dict array [{'name':'myroute','path':'/myroute','view',viewDefinition,'renderer':'renderere_used'}]
+    def before_mapping(self, config):
         """
-        return []
+        Called before the mapping of routes made by FormShare.
 
-    def after_mapping(self,config):
+        :param config: ``pyramid.config`` object
+        :return Returns a dict array [{'name':'myroute','path':'/myroute','view',viewDefinition,
+                                       'renderer':'renderere_used'}]
         """
-        Called after the mapping of router of the host app
+        raise NotImplementedError("before_mapping must be implemented in subclasses")
 
-        :param config: ``pyramid.config`` object that can be used to call add_view
-        :return Returns a dict array [{'name':'myroute','path':'/myroute','view',viewDefinition,'renderer':'renderere_used'}]
+    def after_mapping(self, config):
         """
-        return []
+        Called after the mapping of routes made by FormShare.
+
+        :param config: ``pyramid.config`` object
+        :return Returns a dict array [{'name':'myroute','path':'/myroute','view',viewDefinition,
+                                       'renderer':'renderere_used'}]
+        """
+        raise NotImplementedError("after_mapping must be implemented in subclasses")
+
 
 class IConfig(Interface):
     """
-    Allows the modification of the Pyramid config 
+    Allows the modification of the Pyramid config. For example to add new templates or static directories
     """
 
     def update_config(self, config):
         """
-        Called in the init of the host application.
+        Called by FormShare during the initialization of the environment
 
         :param config: ``pyramid.config`` object
         """
 
+
 class IResource(Interface):
     """
-        Allows to hook into the creation of FanStatic libraries and resources         
+        Allows to hook into the creation of JS and CSS libraries or resources
     """
 
-    def add_libraries(self,config):
+    def add_libraries(self, config):
         """
-        Called by the host application so plugins can add new FanStatic libraries AFTER the host
+        Called by FormShare so plugins can add new JS and CSS libraries to FormShare
 
         :param config: ``pyramid.config`` object
         :return Returns a dict array [{'name':'mylibrary','path':'/path/to/my/resources'}]
         """
-        return []
+        raise NotImplementedError("add_libraries must be implemented in subclasses")
 
-    def add_JSResources(self,config):
+    def add_js_resources(self, config):
         """
-        Called by the host application so plugins can add new FanStatic JS Resources AFTER the host
-        
-        :param config: ``pyramid.config`` object        
-        :return Returns a dict array [{'libraryname':'mylibrary','id':'myResourceID','file':'/relative/path/to/jsFile','depends':'resourceID'}]
-        """
-        return []
+        Called by FormShare so plugins can add new JS Resources
 
-    def add_CSSResources(self, config):
+        :param config: ``pyramid.config`` object
+        :return Returns a dict array [{'libraryname':'mylibrary','id':'myResourceID','file':'/relative/path/to/jsFile',
+                                      'depends':'resourceID'}]
         """
-        Called by the host application so plugins can add new FanStatic JS Resources AFTER the host
+        raise NotImplementedError("add_js_resources must be implemented in subclasses")
 
-        :param config: ``pyramid.config`` object        
-        :return Returns a dict array [{'libraryname':'mylibrary','id':'myResourceID','file':'/relative/path/to/jsFile','depends':'resourceID'}]
+    def add_css_resources(self, config):
         """
-        return []
+        Called by FormShare so plugins can add new FanStatic CSS Resources
+
+        :param config: ``pyramid.config`` object
+        :return Returns a dict array [{'libraryname':'mylibrary','id':'myResourceID','file':'/relative/path/to/jsFile',
+                                      'depends':'resourceID'}]
+        """
+        raise NotImplementedError("add_css_resources must be implemented in subclasses")
+
+
+class ITemplateHelpers(Interface):
+    """
+    Add custom template helper functions.
+
+    By implementing this plugin interface plugins can provide their own
+    template helper functions, which custom templates can then access via the
+    ``request.h`` variable.
+    """
+
+    def get_helpers(self):
+        """
+        Return a dict mapping names to helper functions.
+
+        The keys of the dict should be the names with which the helper
+        functions will be made available to templates, and the values should be
+        the functions themselves. For example, a dict like:
+        ``{'example_helper': example_helper}`` allows templates to access the
+        ``example_helper`` function via ``request.h.example_helper()``.
+
+        Function names should start with the name of the extension providing
+        the function, to prevent name clashes between extensions.
+        :return:
+        """
 
 
 class IPluginObserver(Interface):
     """
     Plugin to the plugin loading mechanism
+
+    This code is based on CKAN
+    :Copyright (C) 2007 Open Knowledge Foundation
+    :license: AGPL V3, see LICENSE for more details.
+
     """
 
     def before_load(self, plugin):

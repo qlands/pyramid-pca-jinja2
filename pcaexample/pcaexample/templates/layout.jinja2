@@ -6,9 +6,11 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="description" content="pyramid web application">
     <meta name="author" content="Pylons Project">
-    <link rel="shortcut icon" href="{{request.static_url('pcaexample:static/pyramid-16x16.png')}}">
+    <link rel="shortcut icon" href="{{request.url_for_static('pyramid-16x16.png')}}">
 
-    <title>Cookiecutter Alchemy project for the Pyramid Web Framework</title>
+    {% block page_title %}
+    <title>A Pyramid application</title>
+    {% endblock page_title %}
 
     <!-- Bootstrap core CSS
     <link href="//oss.maxcdn.com/libs/twitter-bootstrap/3.0.3/css/bootstrap.min.css" rel="stylesheet">
@@ -18,7 +20,7 @@
     <!-- link href="request.static_url('pcaexample:static/theme.css')}}" rel="stylesheet" -->
 
     {% block links %}
-        {% resource request,'coreresources','CSS','theme' %}
+        {% cssresource request,'coreresources','theme' %}
     {% endblock links %}
 
     <!-- HTML5 shim and Respond.js IE8 support of HTML5 elements and media queries -->
@@ -35,7 +37,7 @@
         <div class="row">
             <div class="col-md-2">
                 {% block logo %}
-                    <img class="logo img-responsive" src="{{request.static_url('pcaexample:static/pyramid.png') }}" alt="pyramid web framework">
+                    <img class="logo img-responsive" src="{{request.url_for_static('pyramid.png') }}" alt="pyramid web framework">
                 {% endblock logo %}
             </div>
             <div class="col-md-10">
@@ -47,9 +49,9 @@
         <div class="row">
             <div class="links">
                 <ul>
-                    <li><i class="glyphicon glyphicon-cog icon-muted"></i><a href="https://github.com/Pylons/pyramid">Github Project</a></li>
-                    <li><i class="glyphicon glyphicon-globe icon-muted"></i><a href="https://webchat.freenode.net/?channels=pyramid">IRC Channel</a></li>
-                    <li><i class="glyphicon glyphicon-home icon-muted"></i><a href="http://pylonsproject.org">Pylons Project</a></li>
+                    <li><i class="fas fa-cog icon-muted"></i><a target="_blank" href="https://github.com/Pylons/pyramid">Github Project</a></li>
+                    <li><i class="fas fa-globe icon-muted"></i><a target="_blank" href="https://webchat.freenode.net/?channels=pyramid">IRC Channel</a></li>
+                    <li><i class="fas fa-home icon-muted"></i><a target="_blank" href="http://pylonsproject.org">Pylons Project</a></li>
                 </ul>
             </div>
         </div>
@@ -69,7 +71,7 @@
 <script src="//oss.maxcdn.com/libs/twitter-bootstrap/3.0.3/js/bootstrap.min.js"></script>
 -->
 {% block scripts %}
-    {% resource request,'coreresources','JS','bootstrap' %}
+    {% jsresource request,'coreresources','bootstrap' %}
 {% endblock scripts %}
 </body>
 </html>

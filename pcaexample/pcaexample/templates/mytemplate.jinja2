@@ -7,7 +7,8 @@
             <p class="lead">Welcome to <span class="font-normal">PCA Example</span>, a&nbsp;Pyramid application generated&nbsp;by<br><span class="font-normal">Cookiecutter</span>.</p>
         {% endblock title %}
         {% block extra %}
-            {% snippet 'snippets/my_snippet.jinja2',value='Value for the snippet is 1' %}
+            {% set value = '1' %}
+            {% include 'snippets/my_snippet.jinja2' %}
         {% endblock extra %}
     </div>
 {% endblock content %}

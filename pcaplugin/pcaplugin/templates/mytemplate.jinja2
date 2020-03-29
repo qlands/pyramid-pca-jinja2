@@ -1,16 +1,20 @@
-{% extend_this %}
+{% extend_me %}
 
 {% block links %}
     {# Overwrite the links section #}
     {# Firt call the links of the parent #}
     {{ super() }}
     {# Add the required CSS for this page #}
-    {% resource request,'plibrary','CSS','leaflet' %}
+    {% cssresource request,'plibrary','leaflet' %}
 {% endblock links %}
+
+{% block page_title %}
+    <title>An extended Pyramid application</title>
+{% endblock page_title %}
 
 {% block logo %}
     {# Overwrite the logo section #}
-    <img class="logo img-responsive" src="{{request.url_for_static('pstatic/ppyramid.png') }}" alt="pyramid web framework">
+    <img class="logo img-responsive" src="{{request.url_for_static('ppyramid.png','pstatic') }}" alt="pyramid web framework">
 {% endblock logo %}
 
 {% block title %}
@@ -33,7 +37,7 @@
     {# Firt call the scripts of the parent #}
     {{ super() }}
     {# Add the required JS for this page #}
-    {% resource request,'plibrary','JS','mymap' %}
+    {% jsresource request,'plibrary','mymap' %}
 {% endblock scripts %}
 
 

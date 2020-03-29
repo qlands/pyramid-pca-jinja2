@@ -2,55 +2,96 @@ import os
 
 import pcaexample.plugins as p
 import pcaexample.resources as r
-from jinja_extensions import initialize, SnippetExtension, extendThis, ResourceExtension
-from pcaexample.routes import loadRoutes
+from .jinja_extensions import (
+    initialize,
+    ExtendThis,
+    JSResourceExtension,
+    CSSResourceExtension,
+)
+from pcaexample.routes import load_routes
+import pcaexample.plugins.helpers as helpers
 
 
-# This function return the address of a static URL.
-# It substitutes request.static_url because
-# static_url does not work for plugins when using
-# a full path to the static directory
-def __url_for_static(request,static_file):
-    return request.host_url + '/' + static_file
+def __url_for_static(request, static_file, library="static"):
+    """
+    This function return the address of a static URL. It substitutes request.static_url because static_url does not
+    work for plugins when using a full path to the static directory
+    :param request: Current request object
+    :param static_file: Static file being requested
+    :param library: Library where the static file is located
+    :return: URL to the static resource
+    """
+    return request.application_url + "/" + library + "/" + static_file
 
-class requestResources(object):
+
+def __helper(request):
+    h = helpers.helper_functions
+    return h
+
+
+class RequestResources(object):
+    """
+    This class handles the injection of resources in templates
+    """
 
     def __init__(self, request):
         self.request = request
-        self.curretResources = []
+        self.current_resources = []
 
-    def addResource(self, libraryName, resourceID, resourceType):
-        self.curretResources.append({'libraryName':libraryName,'resourceID':resourceID,'resourceType':resourceType})
+    def add_resource(self, library_name, resource_id, resource_type):
+        self.current_resources.append(
+            {
+                "libraryName": library_name,
+                "resourceID": resource_id,
+                "resourceType": resource_type,
+            }
+        )
 
-    def resourceInRequest(self, libraryName, resourceID, resourceType):
-        for resource in self.curretResources:
-            if resource["libraryName"] == libraryName and resource["resourceID"] == resourceID and resource["resourceType"] == resourceType:
+    def resource_in_request(self, library_name, resource_id, resource_type):
+        for resource in self.current_resources:
+            if (
+                resource["libraryName"] == library_name
+                and resource["resourceID"] == resource_id
+                and resource["resourceType"] == resource_type
+            ):
                 return True
         return False
 
-def load_environment(settings,config,apppath):
 
-    class resourceFoundException(Exception):
-        def __init__(self, msg):
-            self.msg = msg
+def load_environment(settings, config, apppath):
+    config.registry.settings["jinja2.extensions"] = [
+        ExtendThis,
+        JSResourceExtension,
+        CSSResourceExtension,
+    ]
 
-    config.registry.settings['jinja2.extensions'] = [SnippetExtension,extendThis,ResourceExtension]
+    config.include("pyramid_jinja2")
+    # Add url_for_static to the request so plugins can use static resources
+    config.add_request_method(__url_for_static, "url_for_static")
+    # Add active resources to the request. This control the injection of resources into a request
+    config.add_request_method(RequestResources, "activeResources", reify=True)
 
-    config.include('pyramid_jinja2')
-    config.add_request_method(__url_for_static, 'url_for_static')
-    config.add_request_method(requestResources, 'activeResources', reify=True)
+    # Add a series of helper functions to the request like pluralize
+    helpers.load_plugin_helpers()
+    config.add_request_method(__helper, "h", reify=True)
 
     # Add core fanstatic library
-    r.addLibrary('coreresources',os.path.join(apppath, 'fanstatic'),config)
+    r.add_library("coreresources", os.path.join(apppath, "js_and_css"), config)
 
     # Add core CSS and JS
-    r.addCSSResource('coreresources','bootstrapcss','bootstrap.min.css')
-    r.addCSSResource('coreresources', 'theme', 'theme.css')
-    r.addJSResource('coreresources','jquery','jquery.min.js')
-    r.addJSResource('coreresources', 'bootstrap', 'bootstrap.min.js')
+    r.add_css_resource("coreresources", "bootstrapcss", "bootstrap.min.css")
+    r.add_css_resource("coreresources", "font-5", "fontawesome/css/all.css")
+    r.add_css_resource("coreresources", "font-awesome", "fontawesome/css/v4-shims.css")
+    r.add_css_resource("coreresources", "theme", "theme.css")
+    r.add_js_resource("coreresources", "jquery", "jquery.min.js")
+    r.add_js_resource("coreresources", "bootstrap", "bootstrap.min.js")
 
-    templatesPathArray =[]
-    templatesPath = os.path.join(apppath, 'templates')
+    # Add the static view
+    static_path = os.path.join(apppath, "static")
+    config.add_static_view("static", static_path, cache_max_age=3600)
+
+    templatesPathArray = []
+    templatesPath = os.path.join(apppath, "templates")
     templatesPathArray.append(templatesPath)
 
     config.add_settings(templatesPaths=templatesPathArray)
@@ -64,32 +105,39 @@ def load_environment(settings,config,apppath):
     for plugin in p.PluginImplementations(p.IConfig):
         plugin.update_config(config)
 
-    #Call any connected plugins to add their libraries
+    # Call any connected plugins to add their libraries
     for plugin in p.PluginImplementations(p.IResource):
         pluginLibraries = plugin.add_libraries(config)
         for library in pluginLibraries:
-            r.addLibrary(library["name"], library["path"],config)
+            r.add_library(library["name"], library["path"], config)
 
     # Call any connected plugins to add their CSS Resources
     for plugin in p.PluginImplementations(p.IResource):
-        cssResources = plugin.add_CSSResources(config)
+        cssResources = plugin.add_css_resources(config)
         for resource in cssResources:
-            r.addCSSResource(resource["libraryname"], resource["id"], resource["file"], resource["depends"])
-
+            r.add_css_resource(
+                resource["libraryname"],
+                resource["id"],
+                resource["file"],
+                resource["depends"],
+            )
 
     # Call any connected plugins to add their JS Resources
     for plugin in p.PluginImplementations(p.IResource):
-        jsResources = plugin.add_JSResources(config)
+        jsResources = plugin.add_js_resources(config)
         for resource in jsResources:
-            r.addJSResource(resource["libraryname"], resource["id"], resource["file"], resource["depends"])
+            r.add_js_resource(
+                resource["libraryname"],
+                resource["id"],
+                resource["file"],
+                resource["depends"],
+            )
 
     # jinjaEnv is used by the jinja2 extensions so we get it from the config
-    jinjaEnv = config.get_jinja2_environment()
+    config.get_jinja2_environment()
 
     # setup the jinjaEnv template's paths for the extensions
-    initialize(config.registry.settings['templatesPaths'])
+    initialize(config.registry.settings["templatesPaths"])
 
     # Finally we load the routes
-    loadRoutes(config)
-
-
+    load_routes(config)
